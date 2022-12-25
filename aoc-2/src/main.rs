@@ -28,7 +28,7 @@ fn main() {
     let mut score = 0;
 
     for (index, line) in input.lines().enumerate() {
-        let ( opponent_shape, player_shape ) = match parse_line(line) {
+        let ( opponent_shape, outcome ) = match parse_line(line) {
             Ok(shapes) => shapes,
             Err(_) => {
                 println!("Turn {}: Invalid number of turn parameters, skipping turn!", index + 1);
@@ -36,7 +36,7 @@ fn main() {
             }
         };
 
-        let turn = match Turn::new(opponent_shape, player_shape) {
+        let turn = match Turn::new(opponent_shape, outcome) {
             Ok(turn) => turn,
             Err(_) => {
                 println!("Turn {}: Invalid turn parameters, skipping turn!", index + 1);
@@ -46,7 +46,7 @@ fn main() {
 
         println!("Turn {}: {:?} vs. {:?}\t--> {} points, {score} total",
             index + 1,
-            turn.player,
+            turn.player_shape(),
             turn.opponent,
             turn.total_score()
         );
