@@ -32,6 +32,11 @@ impl Range {
     fn fully_overlaps_with(&self, other: &Self) -> bool {
         self.is_contained_by(other) || other.is_contained_by(&self)
     }
+
+    fn overlaps_with(&self, other: &Self) -> bool {
+        (self.start  >= other.start && self.start  <= other.end) || 
+        (other.start >= self.start  && other.start <= self.end)
+    }
 }
 
 fn main() {
@@ -42,6 +47,7 @@ fn main() {
     ).unwrap();
 
     let mut contained_count = 0;
+    let mut overlaps_count = 0;
     for (index, line) in input.lines().enumerate() {
         if !re.is_match(line) {
             println!("Line {}: Invalid syntax! Skipping...", index + 1);
@@ -53,6 +59,9 @@ fn main() {
                 if pair.0.fully_overlaps_with(&pair.1) {
                     contained_count += 1;
                 }
+                if pair.0.overlaps_with(&pair.1) {
+                    overlaps_count += 1;
+                }
             } else {
                 println!("Failed to parse ranges on line {}, skipping...", index + 1);
                 continue;
@@ -60,4 +69,5 @@ fn main() {
         }
     }
     println!("Total number of ranges contained in another is {contained_count}");
+    println!("Total number of ranges overlapping with another is {overlaps_count}");
 }
