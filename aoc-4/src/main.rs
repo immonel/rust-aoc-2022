@@ -1,43 +1,7 @@
 mod input;
+mod range;
 use regex::Regex;
-use std::num::ParseIntError;
-
-struct RangePair (Range, Range);
-
-impl RangePair {
-    fn from(captures: &regex::Captures) -> Result<RangePair, ParseIntError> {
-        Ok(RangePair(
-            Range {
-                start:  captures[1].parse()?,
-                end:    captures[2].parse()?
-            },
-            Range {
-                start:  captures[3].parse()?,
-                end:    captures[4].parse()?
-            }
-        ))
-    }
-}
-
-struct Range {
-    start: i32,
-    end: i32
-}
-
-impl Range {
-    fn is_contained_by(&self, other: &Self) -> bool {
-        self.start >= other.start && self.end <= other.end
-    }
-
-    fn fully_overlaps_with(&self, other: &Self) -> bool {
-        self.is_contained_by(other) || other.is_contained_by(&self)
-    }
-
-    fn overlaps_with(&self, other: &Self) -> bool {
-        (self.start  >= other.start && self.start  <= other.end) || 
-        (other.start >= self.start  && other.start <= self.end)
-    }
-}
+use crate::range::RangePair;
 
 fn main() {
     let input = input::get_input();
